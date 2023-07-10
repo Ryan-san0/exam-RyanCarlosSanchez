@@ -24,18 +24,18 @@ class Bloc extends base.Bloc {
   void init() async {
     final arg = context.arguments;
     final key = await arg?.tryGet("key");
-    final service = context.server;
+    final service = await context.server;
     final msg = await service.data;
-    int code = msg["status_code"];
+    int code = await msg["status_code"];
 
     if (key != await service.accessKey || code != 200) {
-      String message = msg["error_message"];
+      String message = await msg["error_message"];
       emit(error_view.ViewState(message));
       return;
     }
-    String message = msg["message"];
-    String image = msg["image"];
-    int count = msg["count"];
+    String message = await msg["message"];
+    String image = await msg["image"];
+    int count = await msg["count"];
     emit(main_view.ViewState(message,image,code,count));
   }
 
